@@ -16,6 +16,18 @@ public class VideoInfo {
     @SerializedName("avatar")
     public String avatar;
 
+    @Override
+    public String toString() {
+        return "Article{" +
+                "id='" + id + '\'' +
+                ", feedurl='" + feedurl + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", description='" + description + '\'' +
+                ", likecount=" + likecount +
+                ", avatar='" + avatar + '\'' +
+                '}';
+    }
+
     public int getLikecount() {
         return likecount;
     }
