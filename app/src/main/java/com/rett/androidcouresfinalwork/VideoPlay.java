@@ -45,8 +45,8 @@ public class VideoPlay extends AppCompatActivity implements VideoAdapter.ListIte
                 }
             }
         }
-
-        if (Build.VERSION.SDK_INT < 19) {
+        // 设置全屏
+        /*if (Build.VERSION.SDK_INT < 19) {
             View v = this.getWindow().getDecorView();
             v.setSystemUiVisibility(View.GONE);
         } else {
@@ -54,7 +54,7 @@ public class VideoPlay extends AppCompatActivity implements VideoAdapter.ListIte
             int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                     | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_FULLSCREEN;
             decorView.setSystemUiVisibility(uiOptions);
-        }
+        }*/
         setContentView(R.layout.video_play);
         videoPager = findViewById(R.id.video_pager);
         videoAdapter = new VideoAdapter(this, this);

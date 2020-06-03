@@ -1,11 +1,14 @@
 package com.rett.androidcouresfinalwork;
 
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.media.MediaPlayer;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -113,7 +116,22 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
                         like = true;
                         heart.setBackground(context.getResources().getDrawable(R.drawable.ic_red_heart));
                         likeCount.setText(String.valueOf(Integer.parseInt(likeCount.getText().toString()) + 1));
+                        ObjectAnimator animatorX = ObjectAnimator.ofFloat(heart,
+                                "scaleX", 1f, 2f);
+                        animatorX.setRepeatCount(1);
+                        animatorX.setInterpolator(new LinearInterpolator());
+                        animatorX.setRepeatMode(ValueAnimator.REVERSE);
+                        ObjectAnimator animatorY = ObjectAnimator.ofFloat(heart,
+                                "scaleY", 1f, 2f);
+                        animatorX.setDuration(500);
+                        animatorY.setRepeatCount(1);
+                        animatorY.setInterpolator(new LinearInterpolator());
+                        animatorY.setRepeatMode(ValueAnimator.REVERSE);
+                        animatorY.setDuration(500);
+                        animatorX.start();
+                        animatorY.start();
                     }
+
                 }
             });
 
