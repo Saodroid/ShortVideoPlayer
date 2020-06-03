@@ -5,6 +5,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,6 +29,9 @@ public class MainActivity extends AppCompatActivity implements VideoAdapter.List
     private ViewPager2 videoPager;
     private VideoAdapter videoAdapter;
     private TextView listPager;
+    private TextView message;
+    private TextView following;
+    private ImageView add;
     private List<VideoInfo> videoInfoList;
 
     @Override
@@ -46,8 +50,32 @@ public class MainActivity extends AppCompatActivity implements VideoAdapter.List
 
         videoPager = findViewById(R.id.video_pager);
         videoAdapter = new VideoAdapter(this, this);
-        getData();
-        listPager = findViewById(R.id.list_pager);
+        message = findViewById(R.id.message);
+        following = findViewById(R.id.following);
+        add = findViewById(R.id.add_box);
+        listPager = findViewById(R.id.recycler);
+
+        message.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(MainActivity.this, "功能正在开发中，敬请期待！", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        following.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(MainActivity.this, "功能正在开发中，敬请期待！", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(MainActivity.this, "功能正在开发中，敬请期待！", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         listPager.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -58,6 +86,7 @@ public class MainActivity extends AppCompatActivity implements VideoAdapter.List
                 startActivity(intent);
             }
         });
+        getData();
         videoPager.setAdapter(videoAdapter);
     }
 
