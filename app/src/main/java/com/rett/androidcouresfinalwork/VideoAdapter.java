@@ -5,7 +5,6 @@ import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.media.MediaPlayer;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -28,18 +27,24 @@ import com.rett.androidcouresfinalwork.model.VideoInfo;
 
 import java.util.List;
 
+/**
+ * @Author: 李卓
+ * @Date: 2020年6月4日 00点15分
+ * @LastEditors: 李卓
+ * @LastEditTime: 2020年6月4日 00点15分
+ */
 
 public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHolder> {
 
     private final Context context;
     private List<VideoInfo> videoInfoList;
-    private final ListItemClickListener listItemClickListener;
 
-    public VideoAdapter(Context context, ListItemClickListener listener){
+    public VideoAdapter(Context context){
         this.context = context;
-        listItemClickListener = listener;
     }
 
+
+    //ViewHolder创建时调用，用LayoutInflater将元素创建出来
     @NonNull
     @Override
     public VideoViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -53,6 +58,7 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
     public void onBindViewHolder(@NonNull VideoViewHolder videoViewHolder, int i) {
         final VideoInfo videoInfo = videoInfoList.get(i);
 
+        //设置各个组件
         videoViewHolder.videoView.setVisibility(View.GONE);
         videoViewHolder.previewImage.setVisibility(View.VISIBLE);
         videoViewHolder.playButton.setVisibility(View.VISIBLE);
@@ -60,17 +66,19 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
         videoViewHolder.description.setText(videoInfo.description);
         videoViewHolder.nickname.setText(videoInfo.nickname);
 
+        //加载创作者头像
         Glide.with(videoViewHolder.videoItem)
                 .load(videoInfo.avatar)
                 .apply(RequestOptions.bitmapTransform(new CircleCrop()))
                 .into(videoViewHolder.avatar);
+        //截取视频的一帧作为封面图
         Glide.with(videoViewHolder.videoItem)
                 .setDefaultRequestOptions(new RequestOptions().frame(3000000).centerCrop())
                 .load(videoInfo.feedurl)
                 .into(videoViewHolder.previewImage);
         videoViewHolder.videoView.setVideoPath(videoInfo.feedurl);
 
-        Log.d("ViewHolder", String.valueOf(videoInfo.likecount));
+        //如果点赞数大于一万以XX.Xw的形式展示
         float temp = (float) videoInfo.likecount / 10000;
         if (temp >= 1){
             videoViewHolder.likeCount.setText(String.format("%.1fw", temp));
@@ -85,7 +93,7 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
         return videoInfoList == null ? 0 : videoInfoList.size();
     }
 
-    public class VideoViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class VideoViewHolder extends RecyclerView.ViewHolder{
 
         TextView nickname;
         TextView description;
@@ -97,7 +105,6 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
         VideoView videoView;
         RelativeLayout videoItem;
         View loadingBar;
-        TextView hearts1;
         boolean like;
 
         @SuppressLint("ClickableViewAccessibility")
@@ -116,7 +123,10 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
             loadingBar = itemView.findViewById(R.id.loading_bar);
             GestureDetector gestureDetector;
 
+            //添加单双击检测
             gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener(){
+
+                //双击点赞
                 @Override
                 public boolean onDoubleTap(MotionEvent e) {
                     if (like){
@@ -134,6 +144,7 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
                     return super.onDoubleTap(e);
                 }
 
+                //单击播放/暂停
                 @Override
                 public boolean onSingleTapConfirmed(MotionEvent e) {
                     if (videoView.isPlaying()){
@@ -156,7 +167,7 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
                 }
             });
 
-
+            //点击心形会触发点赞与取消点赞事件
             heart.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -164,6 +175,7 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
                     if (like){
                         like = false;
                         heart.setBackground(context.getResources().getDrawable(R.drawable.ic_white_heart));
+                        //如果不是以XX.Xw的形式展示的话，将likeCount减一
                         if (likeCountStr.charAt(likeCountStr.length() - 1) != 'w'){
                             likeCount.setText(String.valueOf(Integer.parseInt(likeCountStr) - 1));
                         }
@@ -179,6 +191,7 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
                 }
             });
 
+            //点击预览图开始播放视频
             previewImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -190,6 +203,7 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
                 }
             });
 
+            //当视频加载好之后
             videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 @Override
                 public void onPrepared(MediaPlayer mediaPlayer) {
@@ -199,6 +213,7 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
                 }
             });
 
+            //点击创作者头像
             avatar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -207,15 +222,7 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
             });
         }
 
-        @Override
-        public void onClick(View view) {
-            Toast.makeText(context, "click video", Toast.LENGTH_SHORT).show();
-            int clickedPosition = getAdapterPosition();
-            if (listItemClickListener != null) {
-                listItemClickListener.onListItemClick(clickedPosition);
-            }
-        }
-
+        //点击心形时出发的动画
         void heartClickAnimation(){
             ObjectAnimator animatorX = ObjectAnimator.ofFloat(heart,
                     "scaleX", 1f, 2f);
@@ -237,10 +244,6 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
 
     public void setVideoInfoList(List<VideoInfo> videoInfoList) {
         this.videoInfoList = videoInfoList;
-    }
-
-    public interface ListItemClickListener {
-        void onListItemClick(int clickedItemIndex);
     }
 
 }

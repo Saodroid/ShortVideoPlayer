@@ -17,7 +17,7 @@ import com.rett.androidcouresfinalwork.model.VideoInfo;
 import java.util.LinkedList;
 import java.util.List;
 
-public class VideoPlay extends AppCompatActivity implements VideoAdapter.ListItemClickListener{
+public class VideoPlay extends AppCompatActivity{
 
     private List<VideoInfo> videoInfos;
     private ViewPager2 videoPager;
@@ -57,13 +57,8 @@ public class VideoPlay extends AppCompatActivity implements VideoAdapter.ListIte
         }*/
         setContentView(R.layout.video_play);
         videoPager = findViewById(R.id.video_pager);
-        videoAdapter = new VideoAdapter(this, this);
+        videoAdapter = new VideoAdapter(this);
         videoPager.setAdapter(videoAdapter);
         videoAdapter.setVideoInfoList(videoInfos);
-    }
-
-    @Override
-    public void onListItemClick(int clickedItemIndex) {
-        return;
     }
 }

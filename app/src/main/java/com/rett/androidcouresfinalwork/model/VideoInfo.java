@@ -3,6 +3,13 @@ package com.rett.androidcouresfinalwork.model;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.internal.LinkedTreeMap;
 
+/**
+ * @Author: 李卓
+ * @Date: 2020年6月4日 00点15分
+ * @LastEditors: 李卓
+ * @LastEditTime: 2020年6月4日 00点15分
+ */
+
 public class VideoInfo {
     @SerializedName("_id")
     public String id;

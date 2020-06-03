@@ -9,6 +9,13 @@ import android.view.WindowManager;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+/**
+ * @Author: 李卓
+ * @Date: 2020年6月4日 00点15分
+ * @LastEditors: 李卓
+ * @LastEditTime: 2020年6月4日 00点15分
+ */
+
 public class OpenActivity extends AppCompatActivity {
     private Handler handler;
     private Runnable runnable;

@@ -24,8 +24,14 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+/**
+ * @Author: 李卓
+ * @Date: 2020年6月4日 00点15分
+ * @LastEditors: 李卓
+ * @LastEditTime: 2020年6月4日 00点15分
+ */
 
-public class MainActivity extends AppCompatActivity implements VideoAdapter.ListItemClickListener{
+public class MainActivity extends AppCompatActivity{
     private ViewPager2 videoPager;
     private VideoAdapter videoAdapter;
     private TextView listPager;
@@ -37,6 +43,8 @@ public class MainActivity extends AppCompatActivity implements VideoAdapter.List
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //实现全屏
         if (Build.VERSION.SDK_INT < 19) {
             View v = this.getWindow().getDecorView();
             v.setSystemUiVisibility(View.GONE);
@@ -48,8 +56,11 @@ public class MainActivity extends AppCompatActivity implements VideoAdapter.List
         }
         setContentView(R.layout.activity_main);
 
+        //viewPager2和它的Adapter
         videoPager = findViewById(R.id.video_pager);
-        videoAdapter = new VideoAdapter(this, this);
+        videoAdapter = new VideoAdapter(this);
+
+        //导航栏里的几个View
         message = findViewById(R.id.message);
         following = findViewById(R.id.following);
         add = findViewById(R.id.add_box);
@@ -76,6 +87,7 @@ public class MainActivity extends AppCompatActivity implements VideoAdapter.List
             }
         });
 
+        //点击视频列会跳转到RecyclerView实现的视频列中
         listPager.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,23 +98,32 @@ public class MainActivity extends AppCompatActivity implements VideoAdapter.List
                 startActivity(intent);
             }
         });
+
+        //使用Retrofit获得数据
         getData();
+
         videoPager.setAdapter(videoAdapter);
     }
 
     @Override
-    public void onResume() {
+    protected void onResume() {
+        //实现全屏
+        if (Build.VERSION.SDK_INT < 19) {
+            View v = this.getWindow().getDecorView();
+            v.setSystemUiVisibility(View.GONE);
+        } else {
+            View decorView = getWindow().getDecorView();
+            int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_FULLSCREEN;
+            decorView.setSystemUiVisibility(uiOptions);
+        }
         super.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
     }
 
     private void setVideoInfos(List<VideoInfo> videoinfos) {
         this.videoInfoList = videoinfos;
     }
+
     private void getData()
     {
         Retrofit retrofit = new Retrofit.Builder()
@@ -131,11 +152,6 @@ public class MainActivity extends AppCompatActivity implements VideoAdapter.List
                 Toast.makeText(MainActivity.this, "There is something wrong with network!\nPlease check it.", Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    @Override
-    public void onListItemClick(int clickedItemIndex) {
-        return;
     }
 }
 
