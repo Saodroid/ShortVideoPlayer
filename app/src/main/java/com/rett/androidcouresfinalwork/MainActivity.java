@@ -1,5 +1,6 @@
 package com.rett.androidcouresfinalwork;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,9 +11,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.google.gson.Gson;
 import com.rett.androidcouresfinalwork.model.VideoInfo;
 import com.rett.androidcouresfinalwork.network.TiktokAPI;
-import com.rett.androidcouresfinalwork.utils.MyVideoView;
 
 import java.util.List;
 
@@ -26,6 +27,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MainActivity extends AppCompatActivity implements VideoAdapter.ListItemClickListener{
     private ViewPager2 videoPager;
     private VideoAdapter videoAdapter;
+    private TextView listPager;
+    private List<VideoInfo> videoInfoList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +47,17 @@ public class MainActivity extends AppCompatActivity implements VideoAdapter.List
         videoPager = findViewById(R.id.video_pager);
         videoAdapter = new VideoAdapter(this, this);
         getData();
-
+        listPager = findViewById(R.id.list_pager);
+        listPager.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, VideoListActivity.class);
+                Gson gson = new Gson();
+                String videoinfolist = gson.toJson(videoInfoList);
+                intent.putExtra("videoInfos", videoinfolist);
+                startActivity(intent);
+            }
+        });
         videoPager.setAdapter(videoAdapter);
     }
 
@@ -58,7 +71,9 @@ public class MainActivity extends AppCompatActivity implements VideoAdapter.List
         super.onPause();
     }
 
-
+    private void setVideoInfos(List<VideoInfo> videoinfos) {
+        this.videoInfoList = videoinfos;
+    }
     private void getData()
     {
         Retrofit retrofit = new Retrofit.Builder()
@@ -76,6 +91,7 @@ public class MainActivity extends AppCompatActivity implements VideoAdapter.List
                     if(videoInfos.size() != 0){
                         videoAdapter.setVideoInfoList(videoInfos);
                         videoAdapter.notifyDataSetChanged();
+                        setVideoInfos(videoInfos);
                     }
                 }
             }

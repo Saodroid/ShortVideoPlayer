@@ -1,6 +1,7 @@
 package com.rett.androidcouresfinalwork.model;
 
 import com.google.gson.annotations.SerializedName;
+import com.google.gson.internal.LinkedTreeMap;
 
 public class VideoInfo {
     @SerializedName("_id")
@@ -15,6 +16,15 @@ public class VideoInfo {
     public int likecount;
     @SerializedName("avatar")
     public String avatar;
+
+    public VideoInfo(LinkedTreeMap map) {
+        this.id = (String)map.get("id");
+        this.feedurl = (String)map.get("feedurl");
+        this.nickname = (String)map.get("nickname");
+        this.description = (String)map.get("description");
+        this.likecount = ((Double)map.get("likecount")).intValue();
+        this.avatar = (String)map.get("avatar");
+    }
 
     @Override
     public String toString() {
