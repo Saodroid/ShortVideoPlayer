@@ -1,8 +1,11 @@
 package com.rett.androidcouresfinalwork;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
@@ -27,6 +30,15 @@ public class MainActivity extends AppCompatActivity implements VideoAdapter.List
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (Build.VERSION.SDK_INT < 19) {
+            View v = this.getWindow().getDecorView();
+            v.setSystemUiVisibility(View.GONE);
+        } else {
+            View decorView = getWindow().getDecorView();
+            int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_FULLSCREEN;
+            decorView.setSystemUiVisibility(uiOptions);
+        }
         setContentView(R.layout.activity_main);
 
         videoPager = findViewById(R.id.video_pager);
@@ -39,13 +51,11 @@ public class MainActivity extends AppCompatActivity implements VideoAdapter.List
     @Override
     public void onResume() {
         super.onResume();
-        MyVideoView.goOnPlayOnResume();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        MyVideoView.releaseAllVideos();
     }
 
 
@@ -73,6 +83,7 @@ public class MainActivity extends AppCompatActivity implements VideoAdapter.List
             @Override
             public void onFailure(Call<List<VideoInfo>> call, Throwable t) {
                 Log.d("retrofit", "on failure");
+                Toast.makeText(MainActivity.this, "There is something wrong with network!\nPlease check it.", Toast.LENGTH_SHORT).show();
             }
         });
     }

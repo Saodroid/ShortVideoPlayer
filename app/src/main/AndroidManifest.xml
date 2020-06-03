@@ -18,7 +18,10 @@
             android:theme="@style/Theme.AppCompat.NoActionBar"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait">
-
+        </activity>
+        <activity android:name=".OpenActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            android:configChanges="orientation|screenSize|keyboardHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
