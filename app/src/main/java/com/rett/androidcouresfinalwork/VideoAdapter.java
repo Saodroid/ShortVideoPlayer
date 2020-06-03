@@ -208,6 +208,7 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
                 @Override
                 public void onPrepared(MediaPlayer mediaPlayer) {
                     loadingBar.setVisibility(View.GONE);
+                    playButton.setVisibility(View.GONE);
                     videoView.requestFocus();
                     videoView.start();
                 }
