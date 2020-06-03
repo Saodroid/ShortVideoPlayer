@@ -1,11 +1,14 @@
 package com.rett.androidcouresfinalwork;
 
+import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.media.MediaPlayer;
+import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
@@ -32,6 +35,8 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
     private final Context context;
     private List<VideoInfo> videoInfoList;
     private final ListItemClickListener listItemClickListener;
+    private long lastTime = System.currentTimeMillis();
+    private AnimatorSet animatorSet;
 
     public VideoAdapter(Context context, ListItemClickListener listener){
         this.context = context;
@@ -88,6 +93,8 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
         VideoView videoView;
         RelativeLayout videoItem;
         View loadingBar;
+        //TextView hearts;
+        TextView hearts1;
         boolean like;
 
         VideoViewHolder(@NonNull View itemView){
@@ -99,10 +106,13 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
             avatar = itemView.findViewById(R.id.avatar_img);
             likeCount = itemView.findViewById(R.id.like_count);
             heart = itemView.findViewById(R.id.heart);
+            //hearts = itemView.findViewById(R.id.hearts);
             previewImage = itemView.findViewById(R.id.preview_image);
             videoItem = itemView.findViewById(R.id.video_item);
             playButton = itemView.findViewById(R.id.play_button);
             loadingBar = itemView.findViewById(R.id.loading_bar);
+
+            hearts1 = itemView.findViewById(R.id.hearts1);
 
             heart.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -116,20 +126,7 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
                         like = true;
                         heart.setBackground(context.getResources().getDrawable(R.drawable.ic_red_heart));
                         likeCount.setText(String.valueOf(Integer.parseInt(likeCount.getText().toString()) + 1));
-                        ObjectAnimator animatorX = ObjectAnimator.ofFloat(heart,
-                                "scaleX", 1f, 2f);
-                        animatorX.setRepeatCount(1);
-                        animatorX.setInterpolator(new LinearInterpolator());
-                        animatorX.setRepeatMode(ValueAnimator.REVERSE);
-                        ObjectAnimator animatorY = ObjectAnimator.ofFloat(heart,
-                                "scaleY", 1f, 2f);
-                        animatorX.setDuration(500);
-                        animatorY.setRepeatCount(1);
-                        animatorY.setInterpolator(new LinearInterpolator());
-                        animatorY.setRepeatMode(ValueAnimator.REVERSE);
-                        animatorY.setDuration(500);
-                        animatorX.start();
-                        animatorY.start();
+                        animatorOperator(heart, 1);
                     }
 
                 }
@@ -156,16 +153,24 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
             });
 
             videoView.setOnClickListener(new View.OnClickListener() {
+
                 @Override
                 public void onClick(View view) {
-                    if (videoView.isPlaying()){
-                        videoView.pause();
-                        playButton.setVisibility(View.VISIBLE);
+                    long currentTime = System.currentTimeMillis();
+                    long tempTime = System.currentTimeMillis();
+                    if (currentTime - lastTime < 500){  //识别到双击事件
+                        animatorOperator(hearts1, 2);
                     }
-                    else{
-                        videoView.start();
-                        playButton.setVisibility(View.GONE);
+                    else {
+                        if (videoView.isPlaying()) {
+                            videoView.pause();
+                            playButton.setVisibility(View.VISIBLE);
+                        } else {
+                            videoView.start();
+                            playButton.setVisibility(View.GONE);
+                        }
                     }
+                    lastTime = currentTime;
                 }
             });
         }
@@ -186,6 +191,42 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
 
     public interface ListItemClickListener {
         void onListItemClick(int clickedItemIndex);
+    }
+
+    public void animatorOperator(TextView target, int type) {
+
+        //likeCount.setText(String.valueOf(Integer.parseInt(likeCount.getText().toString()) + 1));
+        ObjectAnimator animatorX = ObjectAnimator.ofFloat(target,
+                "scaleX", 1f, 2f);
+        animatorX.setRepeatCount(1);
+        animatorX.setDuration(500);
+        animatorX.setInterpolator(new LinearInterpolator());
+        animatorX.setRepeatMode(ValueAnimator.REVERSE);
+
+        ObjectAnimator animatorY = ObjectAnimator.ofFloat(target,
+                "scaleY", 1f, 2f);
+        animatorY.setRepeatCount(1);
+        animatorY.setInterpolator(new LinearInterpolator());
+        animatorY.setRepeatMode(ValueAnimator.REVERSE);
+        animatorY.setDuration(500);
+
+        ObjectAnimator animator3 = ObjectAnimator.ofFloat(target,
+                "alpha", 0f, 1f);
+        animator3.setRepeatMode(ValueAnimator.REVERSE);
+        animator3.setRepeatCount(1);
+        animator3.setDuration(500);
+
+        animatorSet = new AnimatorSet();
+        switch(type) {
+            case 1:
+                animatorSet.playTogether(animatorX, animatorY);
+                animatorSet.start();
+                break;
+            case 2:
+                animatorSet.playTogether(animatorX, animatorY,animator3);
+                animatorSet.start();
+                break;
+        }
     }
 
 }
