@@ -107,10 +107,12 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
                     if (like){
                         like = false;
                         heart.setBackground(context.getResources().getDrawable(R.drawable.ic_white_heart));
+                        likeCount.setText(String.valueOf(Integer.parseInt(likeCount.getText().toString()) - 1));
                     }
                     else{
                         like = true;
                         heart.setBackground(context.getResources().getDrawable(R.drawable.ic_red_heart));
+                        likeCount.setText(String.valueOf(Integer.parseInt(likeCount.getText().toString()) + 1));
                     }
                 }
             });
