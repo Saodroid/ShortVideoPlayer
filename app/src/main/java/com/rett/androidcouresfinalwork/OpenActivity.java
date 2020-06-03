@@ -17,6 +17,7 @@ public class OpenActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //实现全屏
         if (Build.VERSION.SDK_INT < 19) {
             View v = this.getWindow().getDecorView();
             v.setSystemUiVisibility(View.GONE);
@@ -40,7 +41,7 @@ public class OpenActivity extends AppCompatActivity {
                 startActivity(intent);
                 finish();
             }
-        }, 2000);//延迟5S后发送handler信息
+        }, 2000);//延迟2S后发送handler信息
 
 
     }
