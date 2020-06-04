@@ -24,6 +24,12 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+/**
+ * @Author: 王镖
+ * @Date: 2020年6月4日 12点15分
+ * @LastEditors: 王镖
+ * @LastEditTime: 2020年6月4日 12点15分
+ */
 public class VideoListActivity extends AppCompatActivity {
 
     private RecyclerView rv_video_list;
@@ -35,8 +41,10 @@ public class VideoListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_list);
 
+        // 接收来自MainActivity的数据
         Intent intent = getIntent();
         String list = intent.getStringExtra("videoInfos");
+        // 将接收到的相应数据的格式转换成VideoInfo
         Gson gson = new Gson();
         List<LinkedTreeMap> maps = gson.fromJson(list, List.class);
         Log.d("videoInfos", String.valueOf(videoInfos));
@@ -57,33 +65,6 @@ public class VideoListActivity extends AppCompatActivity {
         itemAdapter.setVideoInfoList(videoInfos);
     }
 
-    /*private void getData()
-    {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://beiyou.bytedance.com/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        TiktokAPI tiktokAPI = retrofit.create(TiktokAPI.class);
-        tiktokAPI.getVideoInfo().enqueue(new Callback<List<VideoInfo>>() {
-            @Override
-            public void onResponse(Call<List<VideoInfo>> call, Response<List<VideoInfo>> response) {
-                if(response.body() != null){
-                    List<VideoInfo> videoInfos = response.body();
-                    Log.d("retrofit2", videoInfos.toString());
-                    if(videoInfos.size() != 0){
-                        itemAdapter.setVideoInfoList(videoInfos);
-                        itemAdapter.notifyDataSetChanged();
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<VideoInfo>> call, Throwable t) {
-                Log.d("retrofit", "on failure");
-            }
-        });
-    }*/
 
 }
 
