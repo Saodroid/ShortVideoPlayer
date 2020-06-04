@@ -8,4 +8,4 @@ PPT也在本文件夹下
 
 实现效果预览如下：
 
-<img src="C:\Users\67585\Assignments\Mobile_Network_Andorid\Final\FinalWork\demo\demo.gif" style="zoom:33%;" />
+<img src="https://github.com/Saodroid/ShortVideoPlayer/blob/master/demo/demo.gif" style="zoom:33%;" />
