@@ -17,6 +17,12 @@ import com.rett.androidcouresfinalwork.model.VideoInfo;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * @Author: 王镖
+ * @Date: 2020年6月4日 12点15分
+ * @LastEditors: 王镖
+ * @LastEditTime: 2020年6月4日 12点15分
+ */
 public class VideoPlay extends AppCompatActivity{
 
     private List<VideoInfo> videoInfos;
@@ -26,9 +32,12 @@ public class VideoPlay extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        // 从VideoListActivity获取videoInfos数据和用户选择播放的视频数据feedurl
         Intent intent = getIntent();
         String list = intent.getStringExtra("videoInfos");
         String feedurl = intent.getStringExtra("feedurl");
+        // 数据格式转换
         Gson gson = new Gson();
         List<LinkedTreeMap> maps = gson.fromJson(list, List.class);
         videoInfos = new LinkedList<>();
@@ -46,7 +55,7 @@ public class VideoPlay extends AppCompatActivity{
             }
         }
         // 设置全屏
-        /*if (Build.VERSION.SDK_INT < 19) {
+        if (Build.VERSION.SDK_INT < 19) {
             View v = this.getWindow().getDecorView();
             v.setSystemUiVisibility(View.GONE);
         } else {
@@ -54,7 +63,9 @@ public class VideoPlay extends AppCompatActivity{
             int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                     | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_FULLSCREEN;
             decorView.setSystemUiVisibility(uiOptions);
-        }*/
+        }
+        
+        // 调用VideoAdapter
         setContentView(R.layout.video_play);
         videoPager = findViewById(R.id.video_pager);
         videoAdapter = new VideoAdapter(this);
