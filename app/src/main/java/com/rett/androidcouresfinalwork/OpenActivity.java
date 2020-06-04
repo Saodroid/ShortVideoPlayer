@@ -18,7 +18,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class OpenActivity extends AppCompatActivity {
     private Handler handler;
-    private Runnable runnable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +39,7 @@ public class OpenActivity extends AppCompatActivity {
         getWindow().setFlags(flag, flag);
 
         handler = new Handler();
-        handler.postDelayed(runnable = new Runnable() {
+        handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 //跳转到首界面
@@ -48,7 +47,7 @@ public class OpenActivity extends AppCompatActivity {
                 startActivity(intent);
                 finish();
             }
-        }, 2000);//延迟2S后发送handler信息
+        }, 2000);//延迟2S发送信息
 
 
     }

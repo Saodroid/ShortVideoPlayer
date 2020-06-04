@@ -126,11 +126,13 @@ public class MainActivity extends AppCompatActivity{
 
     private void getData()
     {
+        //设置baseurl并使用Gson转换数据
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://beiyou.bytedance.com/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
+        //绑定retrofit与tiktokAPI，设置请求成功与请求失败两种情况下的行为
         TiktokAPI tiktokAPI = retrofit.create(TiktokAPI.class);
         tiktokAPI.getVideoInfo().enqueue(new Callback<List<VideoInfo>>() {
             @Override
