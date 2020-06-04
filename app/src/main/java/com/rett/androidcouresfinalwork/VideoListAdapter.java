@@ -22,6 +22,13 @@ import com.rett.androidcouresfinalwork.model.VideoInfo;
 
 import java.util.List;
 
+
+/**
+ * @Author: 王镖
+ * @Date: 2020年6月4日 12点15分
+ * @LastEditors: 王镖
+ * @LastEditTime: 2020年6月4日 12点15分
+ */
 public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.VideoViewHolder> {
 
     private Context context;
@@ -43,10 +50,11 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.Vide
 
     @Override
     public void onBindViewHolder(@NonNull VideoListAdapter.VideoViewHolder holder, int position) {
-
+        // 获取特定位置数据
         VideoInfo videoInfo = videoInfos.get(position);
-
+        // 视频描述
         holder.description.setText(videoInfo.description);
+        // 视频预览，获取一帧截图作为预览图一部分
         Glide.with(context)
                 .setDefaultRequestOptions(new RequestOptions().frame(0))
                 .load(videoInfo.getFeedurl())
@@ -54,6 +62,7 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.Vide
                 //.fitCenter()
                 .centerCrop()
                 .into(holder.imageView1);
+        // 获取另一帧截图作为预览图作为另一部分
         Glide.with(context)
                 .setDefaultRequestOptions(new RequestOptions().frame(3000000))
                 .load(videoInfo.getFeedurl())
@@ -61,7 +70,7 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.Vide
                 //.fitCenter()
                 .centerCrop()
                 .into(holder.imageView2);
-
+        // 设置点击事件，当点击列表中某一行视频时跳转到该视频的播放页面
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -75,6 +84,7 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.Vide
         });
     }
 
+    // 列表长度为videoInfos的长度
     @Override
     public int getItemCount() {
         return videoInfos == null ? 0 : videoInfos.size();
@@ -84,6 +94,7 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.Vide
         this.videoInfos = videoInfos;
     }
 
+    // 设置VideoViewHolder
     public class VideoViewHolder extends RecyclerView.ViewHolder {
 
         private ImageView imageView1;
